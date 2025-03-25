@@ -1,0 +1,51 @@
+<div id="workout-log-page" class="content-container pt-3 pt-md-4 px-3 px-md-5">
+    <!-- Workout Log Header -->
+    <div class="row mb-4">
+        <div class="col-12 text-center">
+            <h2>Workout Log</h2>
+            <p class="dashboard-text-muted">Track your daily workouts.</p>
+        </div>
+    </div>
+
+    <!-- Workout Log Form -->
+    <div class="row mb-3">
+        <div class="col-12">
+            <div class="dashboard-card">
+                <div class="dashboard-card-body">
+                    <h5 class="dashboard-card-title">Log a Workout</h5>
+                    <form id="workout-log-form">
+                        <div class="mb-3">
+                            <label for="workout-type" class="">Workout Type</label>
+                            <input type="text" class="form-control" id="workout-type" placeholder="e.g., Running, Weightlifting">
+                        </div>
+                        <div class="mb-3">
+                            <label for="workout-duration" class="">Duration (minutes)</label>
+                            <input type="number" class="form-control" id="workout-duration" placeholder="e.g., 30">
+                        </div>
+                        <div class="mb-3">
+                            <label for="workout-calories" class="">Calories Burned</label>
+                            <input type="number" class="form-control" id="workout-calories" placeholder="e.g., 300">
+                        </div>
+                        <button type="submit" class="btn btn-custom-primary">Log Workout</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Workout History -->
+    <div class="row">
+        <div class="col-12">
+            <div class="dashboard-card">
+                <div class="dashboard-card-body">
+                    <h5 class="dashboard-card-title">Workout History</h5>
+                    <ul class="list-group">
+                        <li class="list-group-item">Running - 30 mins (300 kcal)</li>
+                        <li class="list-group-item">Weightlifting - 45 mins (200 kcal)</li>
+                        <li class="list-group-item">Yoga - 60 mins (150 kcal)</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
