@@ -14,7 +14,8 @@
         }
 
         public function searchByName($searchTerm) {  // to search exercises without having to put entire exact name
-            $stmt = this->connection->prepare("SELECT * FROM exercises where name LIKE :searchTerm");
+            $stmt = $this->connection->prepare("SELECT * FROM exercises where name LIKE :searchTerm");
+            $searchTerm = "%$searchTerm%"; // add wildcards for the LIKE clause, bez ovog ne radi
             $stmt->bindParam(':searchTerm', $searchTerm);
             $stmt->execute();
             return $stmt->fetchAll();

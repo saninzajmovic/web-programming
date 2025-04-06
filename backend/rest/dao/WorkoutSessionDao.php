@@ -14,7 +14,7 @@
         }
 
         public function getByDateRange($user_id, $start_date, $end_date) {
-            $stmt = this->connection->prepare("SELECT * FROM workout_sessions WHERE user_id = :user_id AND date BETWEEN :start_date AND :end_date");
+            $stmt = $this->connection->prepare("SELECT * FROM workout_sessions WHERE user_id = :user_id AND date BETWEEN :start_date AND :end_date");
             $stmt->bindParam(':user_id', $user_id);
             $stmt->bindParam(':start_date', $start_date);
             $stmt->bindParam(':end_date', $end_date);
