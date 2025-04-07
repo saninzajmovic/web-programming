@@ -1,0 +1,1 @@
+- in business logic layer, add calculation for calories_burned in session_exercises table
