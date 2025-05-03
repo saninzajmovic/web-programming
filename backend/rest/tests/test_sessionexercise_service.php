@@ -39,8 +39,8 @@ try {
     // Test creating a session exercise (calories will be calculated)
     $exercise = [
         'session_id' => $sessionId,
-        'exercise_id' => 1 // assuming ID 1 exists in exercises table
-        // 'duration' => 30 // minutes
+        'exercise_id' => 1, // assuming ID 1 exists in exercises table
+        'duration' => 30 // minutes
     ];
     $createdExercise = $exerciseService->createSessionExercise($exercise, $userId);
     print_r($createdExercise);
