@@ -1,7 +1,16 @@
 - in business logic layer, add calculation for calories_burned in session_exercises table
-    userBLL - stavljeno tamo u komentar DONE
-    exerciseBLL - make da se ne mogu biti dvije iste exercises DONE
-    workoutsessionBLL - sto se tice same database ne vidim da treba ista, check DAO
-    sessionexercisesBLL - calculation for calories_burned DONE
-    nutritionBLL - sto se tice same databse ne vidim da treba ista, check DAO DONE
-    goalBLL - goal_type ('weight','workout_frequency','daily_water','daily_calories') DONE
+    DONE userBLL - stavljeno tamo u komentar DONE
+    DONE exerciseBLL - make da se ne mogu biti dvije iste exercises DONE
+    DONE workoutsessionBLL - sto se tice same database ne vidim da treba ista, check DAO DONE
+    DONE sessionexercisesBLL - calculation for calories_burned DONE
+    DONE nutritionBLL - sto se tice same databse ne vidim da treba ista, check DAO DONE
+    DONE goalBLL - goal_type ('weight','workout_frequency','daily_water','daily_calories') DONE
+    * eventualno add "createCompleteWorkoutSession()"
+    * i might need to do all the update validation as well for all the services
+
+- tests
+    * braco, ovaj sessionExercise nesto, ma nmg fr; Error: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'duration' in 'field list'
+    * joj ista stvar u onom WorkoutSession 
+
+
+(deleted vendor folder)
