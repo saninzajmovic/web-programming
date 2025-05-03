@@ -1,7 +1,7 @@
 - in business logic layer, add calculation for calories_burned in session_exercises table
-    userBLL - stavljeno tamo u komentar
-    exerciseBLL - make da se ne mogu biti dvije iste exercises
+    userBLL - stavljeno tamo u komentar DONE
+    exerciseBLL - make da se ne mogu biti dvije iste exercises DONE
     workoutsessionBLL - sto se tice same database ne vidim da treba ista, check DAO
-    sessionexercisesBLL - calculation for calories_burned 
-    nutritionBLL - sto se tice same databse ne vidim da treba ista, check DAO
-    goalBLL - goal_type ('weight','workout_frequency','daily_water','daily_calories')
+    sessionexercisesBLL - calculation for calories_burned DONE
+    nutritionBLL - sto se tice same databse ne vidim da treba ista, check DAO DONE
+    goalBLL - goal_type ('weight','workout_frequency','daily_water','daily_calories') DONE

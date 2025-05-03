@@ -6,6 +6,13 @@
             parent::__construct("users");
         }
 
+        public function emailExists($email) {
+            $stmt = $this->connection->prepare("SELECT 1 FROM users WHERE email = :email");
+            $stmt->bindParam(':email', $email);
+            $stmt->execute();
+            return (bool)$stmt->fetchColumn();
+        }
+
         public function getByEmail($email) {
             $stmt = $this->connection->prepare("SELECT * FROM users WHERE email = :email");
             $stmt->bindParam(':email', $email);

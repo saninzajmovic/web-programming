@@ -29,8 +29,8 @@
             $stmt = $this->connection->prepare($sql);
             $stmt->bindParam(':user_id', $user_id);
             $stmt->bindParam(':limit', $limit, PDO::PARAM_INT); // wont work bez ovog param hepeka
-            // Debugging: Output the SQL statement
-            //echo $sql; // This will print the SQL statement
+            // debugging: uutput the SQL statement
+            //echo $sql; // print the SQL statement
             $stmt->execute();
             return $stmt->fetchAll();
         }
@@ -64,6 +64,17 @@
             $stmt->bindParam(':date', $date);
             $stmt->execute();
             return $stmt->fetchAll();
+        }
+
+        public function getLatestWeight($userId) {
+            $stmt = $this->connection->prepare(
+                "SELECT user_weight FROM nutrition 
+                 WHERE user_id = :user_id AND user_weight IS NOT NULL
+                 ORDER BY date DESC LIMIT 1"
+            );
+            $stmt->bindParam(':user_id', $userId);
+            $stmt->execute();
+            return $stmt->fetchColumn();
         }
     }
 ?>
