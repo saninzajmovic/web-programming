@@ -1,5 +1,5 @@
 <?php
-    require_once './config.php';
+    require_once '../config.php';
 
     class BaseDao {
         protected $table;
@@ -19,6 +19,15 @@
         public function getById($id) {
             $stmt = $this->connection->prepare("SELECT * FROM " . $this->table . " WHERE id = :id");
             $stmt->bindParam(':id', $id);
+            $stmt->execute();
+            return $stmt->fetch();
+        }
+
+        // for services to check if same thing already exists
+        public function getBy($columnm, $search) {
+            $stmt = $this->connection->prepare("SELECT * FROM " . $this->table . " WHERE :column = :search");
+            $stmt->bindParam(':column', $columnm);
+            $stmt->bindParam(':search', $search);
             $stmt->execute();
             return $stmt->fetch();
         }
