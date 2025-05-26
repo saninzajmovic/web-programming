@@ -23,6 +23,16 @@ function loadPage(page) {
                 document.title = "Trackify - Workout Log";
             }
 
+            if (page === 'login.html') {
+                loadScript('utils/constants.js')
+                    .then(() => loadScript('services/user-service.js'))
+                    .then(() => {
+                        if (typeof UserService !== 'undefined') {
+                            UserService.init();
+                        }
+                    })
+            }
+
             // Load the navbar for dashboard, profile, and workout-log pages
             if (page === 'dashboard.html' || page === 'profile.html' || page === 'goals.html' || page === 'workout-log.html') {
                 loadNavbar().then(() => {
@@ -38,6 +48,17 @@ function loadPage(page) {
         .catch(error => {
             console.error('Error loading page:', error);
         });
+}
+
+// Function to load sctipt
+function loadScript(src) {
+    return new Promise((resolve, reject) => {
+        const script = document.createElement('script');
+        script.src = src;
+        script.onload = resolve;
+        script.onerror = reject;
+        document.body.appendChild(script);
+    });
 }
 
 // Function to load the navbar

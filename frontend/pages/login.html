@@ -65,21 +65,22 @@
                             <h4 class="mt-1 mb-5 pb-1 racing-sans-one-regular">Welcome to Trackify</h4>
                         </div>
         
-                        <form>
+                        <form id="login-form">
                             <p class="racing-sans-one-regular">Please login to your account</p>
         
                             <div data-mdb-input-init class="form-outline mb-4">
-                            <input type="text" id="form2Example11" class="form-control" />
-                            <label class="form-label" for="form2Example11">Username</label>
+                            <input type="email" id="form2Example11" name="email" class="form-control" />
+                            <label class="form-label" for="form2Example11">Email</label>
                             </div>
         
                             <div data-mdb-input-init class="form-outline mb-4">
-                            <input type="password" id="form2Example22" class="form-control" />
+                            <input type="password" id="form2Example22" name="password" class="form-control" />
                             <label class="form-label" for="form2Example22">Password</label>
                             </div>
         
                             <div class="text-center pt-1 mb-3 pb-1">
-                            <button data-mdb-button-init data-mdb-ripple-init class="btn btn-block btn-custom-white-text fa-lg gradient-custom-2 mb-3" type="button" onclick="loadPage('dashboard.html')">Log in</button>
+                            <button data-mdb-button-init data-mdb-ripple-init class="btn btn-block btn-custom-white-text fa-lg gradient-custom-2 mb-3" type="submit">Log in</button>
+                            <!--<button data-mdb-button-init data-mdb-ripple-init class="btn btn-block btn-custom-white-text fa-lg gradient-custom-2 mb-3" type="submit" onclick="loadPage('dashboard.html')">Log in</button>-->
                         
                             <a class="text-muted" href="#!">Forgot password?</a>
                             </div>
@@ -116,3 +117,9 @@
         </section>
     </div>
 </div>
+
+<script src="utils/constants.js"></script>
+<script src="services/user-service.js"></script>
+<script type="text/javascript">
+    UserService.init();
+</script>
