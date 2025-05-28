@@ -12,3 +12,11 @@
     * braco, ovaj sessionExercise nesto, ma nmg fr; Error: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'duration' in 'field list'
     * joj ista stvar u onom WorkoutSession 
 
+- u changed some config.php stuff and database connection might not work because the structure is different and base dao has require_once 
+
+lab 8 authorization
+- check roles.php later if you need to update them web-programming\backend\data\roles.php IMPORTANT ########################
+- Flight::auth_middleware()->authorizeRole(Roles::USER); (dodaj ovo for every route to ensure which route can be accessed within each role)
+
+lab 9 API testing
+- ./vendor/bin/phpunit tests/RestaurantTest.php (this is to run the test)
