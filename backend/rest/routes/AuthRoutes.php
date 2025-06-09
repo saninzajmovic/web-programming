@@ -1,7 +1,8 @@
 <?php
 use Firebase\JWT\JWT;
 use Firebase\JWT\Key;
-Flight::group('/auth', function() {
+
+// Flight::group('/auth', function() {
    /**
     * @OA\Post(
     *     path="/auth/register",
@@ -43,21 +44,24 @@ Flight::group('/auth', function() {
     *     )
     * )
     */
-   Flight::route("POST /register", function () {
-       $data = Flight::request()->data->getData();
-
-
-       $response = Flight::auth_service()->register($data);
-  
-       if ($response['success']) {
-           Flight::json([
-               'message' => 'User registered successfully',
-               'data' => $response['data']
-           ]);
-       } else {
-           Flight::halt(500, $response['error']);
-       }
-   });
+Flight::route("POST /auth/register", function () {
+    try {
+        $data = Flight::request()->data->getData();
+        
+        $response = Flight::auth_service()->register($data);
+        
+        if ($response['success']) {
+            Flight::json([
+                'message' => 'User registered successfully',
+                'data' => $response['data']
+            ]);
+        } else {
+            Flight::halt(500, $response['error']);
+        }
+    } catch (Exception $e) {
+        Flight::halt(500, "Registration error: " . $e->getMessage());
+    }
+});
    /**
     * @OA\Post(
     *      path="/auth/login",
@@ -77,20 +81,82 @@ Flight::group('/auth', function() {
     *      )
     * )
     */
-   Flight::route('POST /login', function() {
-       $data = Flight::request()->data->getData();
+//    Flight::route('POST /auth/login', function() {
+//        $data = Flight::request()->data->getData();
 
 
-       $response = Flight::auth_service()->login($data);
+//        $response = Flight::auth_service()->login($data);
   
-       if ($response['success']) {
-           Flight::json([
-               'message' => 'User logged in successfully',
-               'data' => $response['data']
-           ]);
-       } else {
-           Flight::halt(500, $response['error']);
-       }
-   });
+//        if ($response['success']) {
+//            Flight::json([
+//                'message' => 'User logged in successfully',
+//                'data' => $response['data']
+//            ]);
+//        } else {
+//            Flight::halt(500, $response['error']);
+//        }
+//    });
+
+
+// Flight::route('POST /auth/login', function() {
+//     try {
+//         error_log("=== LOGIN ROUTE HIT ===");
+        
+//         // Debug: Check if we can get the request data
+//         $rawInput = Flight::request()->getBody();
+//         error_log("Raw input: " . $rawInput);
+        
+//         $data = Flight::request()->data->getData();
+//         error_log("Parsed data: " . print_r($data, true));
+        
+//         // Check if auth service exists
+//         if (!Flight::has('auth_service')) {
+//             error_log("Auth service not registered!");
+//             Flight::halt(500, "Auth service not available");
+//         }
+        
+//         error_log("Calling auth service login...");
+//         $response = Flight::auth_service()->login($data);
+//         error_log("Auth service response: " . print_r($response, true));
+        
+//         if ($response['success']) {
+//             Flight::json([
+//                 'message' => 'User logged in successfully',
+//                 'data' => $response['data']
+//             ]);
+//         } else {
+//             error_log("Login failed: " . $response['error']);
+//             Flight::halt(500, $response['error']);
+//         }
+//     } catch (Exception $e) {
+//         error_log("Login exception: " . $e->getMessage());
+//         error_log("Stack trace: " . $e->getTraceAsString());
+//         Flight::halt(500, "Login error: " . $e->getMessage());
+//     }
+// });
+
+// Flight::route('POST /auth/login', function() {
+//     Flight::json(['message' => 'Login route is working', 'received_data' => Flight::request()->data->getData()]);
+// });
+
+Flight::route('POST /auth/login', function() {
+    try {
+        $data = Flight::request()->data->getData();
+        $response = Flight::auth_service()->login($data);
+        
+        if ($response['success']) {
+            Flight::json([
+                'message' => 'User logged in successfully',
+                'data' => $response['data']
+            ]);
+        } else {
+            Flight::halt(500, $response['error']);
+        }
+    } catch (Exception $e) {
+        Flight::halt(500, "Login error: " . $e->getMessage());
+    }
 });
+
+
+// });
 ?>

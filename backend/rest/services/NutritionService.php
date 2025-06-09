@@ -1,6 +1,6 @@
 <?php
     require_once 'BaseService.php';
-    require_once '../dao/NutritionDao.php';
+    require_once __DIR__ . '/../dao/NutritionDao.php';
 
     class NutritionService extends BaseService {
         public function __construct() {
