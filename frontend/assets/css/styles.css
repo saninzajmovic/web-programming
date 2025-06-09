@@ -14,6 +14,15 @@ body {
     color: var(--text-color);
 }
 
+/* Disable MDB input animations completely */
+.form-outline .form-notch {
+    display: none !important;
+}
+.form-outline .form-control:focus ~ .form-label {
+    transform: translateY(-1.1rem) scale(.8);
+    color: #fff;
+}
+
 
 /* fail malo za input
 .input-container {

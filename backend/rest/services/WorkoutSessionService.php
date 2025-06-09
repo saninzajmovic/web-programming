@@ -1,6 +1,6 @@
 <?php
     require_once 'BaseService.php';
-    require_once '../dao/WorkoutSessionDao.php';
+    require_once __DIR__ . '/../dao/WorkoutSessionDao.php';
     require_once 'SessionExerciseService.php';
 
     class WorkoutSessionService extends BaseService {

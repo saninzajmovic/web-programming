@@ -1,99 +1,213 @@
 var UserService = {
- init: function () {
-   var token = localStorage.getItem("user_token");
-   if (token && token !== undefined) {
-     loadPage("index.html");
-   }
-   $("#login-form").validate({
-     submitHandler: function (form) {
-       var entity = Object.fromEntries(new FormData(form).entries());
-       UserService.login(entity);
-     },
-   });
- },
- login: function (entity) {
-   $.ajax({
-     url: Constants.PROJECT_BASE_URL + "auth/login",
-     type: "POST",
-     data: JSON.stringify(entity),
-     contentType: "application/json",
-     dataType: "json",
-     success: function (result) {
-       console.log(result);
-       localStorage.setItem("user_token", result.data.token);
-       loadPage('dashboard.html');
-     },
-     error: function (XMLHttpRequest, textStatus, errorThrown) {
-       toastr.error(XMLHttpRequest?.responseText ?  XMLHttpRequest.responseText : 'Error');
-     },
-   });
- },
+    init: function () {
+        console.log("userservice.js init");
+        
+        // Initialize login form if it exists
+        if ($("#login-form").length > 0) {
+            $("#login-form").validate({
+                // TODO dodaj validaciju
+                submitHandler: function (form, e) {
+                    e.preventDefault();
+                    var entity = Object.fromEntries(new FormData(form).entries());
+                    console.log("Login attempt:", entity);
+                    UserService.login(entity);
+                },
+            });
+        }
+        
+        // Initialize registration form if it exists
+        if ($("#register-form").length > 0) {
+            $("#register-form").validate({
+                rules: {
+                    username: {
+                        required: true,
+                        minlength: 3
+                    },
+                    email: {
+                        required: true,
+                        email: true
+                    },
+                    password: {
+                        required: true,
+                        minlength: 6
+                    }
+                },
+                messages: {
+                    username: {
+                        required: "Please enter a username",
+                        minlength: "Username must be at least 3 characters"
+                    },
+                    email: {
+                        required: "Please enter an email address",
+                        email: "Please enter a valid email address"
+                    },
+                    password: {
+                        required: "Please enter a password",
+                        minlength: "Password must be at least 6 characters"
+                    }
+                },
+                submitHandler: function (form, e) {
+                    e.preventDefault();
+                    var entity = Object.fromEntries(new FormData(form).entries());
+                    console.log("Registration attempt:", entity);
+                    
+                    // Remove confirmPassword from the entity before sending to server
+                    delete entity.confirmPassword;
+                    
+                    UserService.register(entity);
+                },
+            });
+        }
+    },
+    
+    login: function (entity) {
+        $.ajax({
+            url: Constants.PROJECT_BASE_URL + "auth/login",
+            type: "POST",
+            data: JSON.stringify(entity),
+            contentType: "application/json",
+            dataType: "json",
+            success: function (result) {
+                console.log("Login successful:", result);
+                localStorage.setItem("user_token", result.data.token);
+                toastr.success("Login successful!");
+                loadPage('dashboard.html');
+            },
+            error: function (XMLHttpRequest, textStatus, errorThrown) {
+                console.error("Login error:", XMLHttpRequest);
+                const errorMessage = XMLHttpRequest?.responseJSON?.message || 
+                                   XMLHttpRequest?.responseText || 
+                                   'Invalid username or password';
+                toastr.error(errorMessage);
+            },
+        });
+    },
 
+    register: function (entity) {
+        console.log("Attempting to register user:", entity);
+        
+        $.ajax({
+            url: Constants.PROJECT_BASE_URL + "auth/register", // Adjust endpoint as needed
+            type: "POST",
+            data: JSON.stringify(entity),
+            contentType: "application/json",
+            dataType: "json",
+            success: function (result) {
+                console.log("Registration successful:", result);
+                toastr.success("Registration successful! Please login with your credentials.");
+                
+                // Redirect to login page after successful registration
+                setTimeout(() => {
+                    loadPage('login.html');
+                }, 2000); // Give user time to read the success message
+            },
+            error: function (XMLHttpRequest, textStatus, errorThrown) {
+                console.error("Registration error:", XMLHttpRequest);
+                const errorMessage = XMLHttpRequest?.responseJSON?.message || 
+                                   XMLHttpRequest?.responseText || 
+                                   'Registration failed. Please try again.';
+                toastr.error(errorMessage);
+            },
+        });
+    },
 
- logout: function () {
-   localStorage.clear();
-   loadPage("login.html");
- },
- generateMenuItems: function(){
-   const token = localStorage.getItem("user_token");
-   const user = Utils.parseJwt(token).user;
+    logout: function () {
+        localStorage.clear();
+        toastr.info("You have been logged out.");
+        loadPage("login.html");
+    },
+    
+    generateNavbar: function() {
+        console.log('generateNavbar called');
+        
+        const token = localStorage.getItem("user_token");
+        
+        if (!token || token === "undefined") {
+            console.log('No valid token found, redirecting to login');
+            loadPage("login.html");
+            return;
+        }
 
+        try {
+            // Simple JWT parsing - don't depend on Utils
+            let user = null;
+            try {
+                // Basic JWT decode (for payload only, not secure validation)
+                const payload = JSON.parse(atob(token.split('.')[1]));
+                user = payload.user;
+                console.log('User from token:', user);
+            } catch (jwtError) {
+                console.error('Failed to parse JWT:', jwtError);
+                // If JWT parsing fails, redirect to login
+                loadPage("login.html");
+                return;
+            }
+            
+            let navItems = '';
 
-   if (user && user.role){
-     let nav = "";
-     let main = "";
-     switch(user.role) {
-       case Constants.USER_ROLE:
-         nav = '<li class="nav-item mx-0 mx-lg-1">'+
-                 '<a class="nav-link py-3 px-0 px-lg-3 rounded " href="#students">Students</a>'+
-             '</li>'+
-             '<li class="nav-item mx-0 mx-lg-1">'+
-                 '<a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" href="#highcharts">Highcharts</a>'+
-             '</li>'+
-             '<li class="nav-item mx-0 mx-lg-1">'+
-                 '<a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" href="#forms">Forms</a>'+
-             '</li>'+
-             '<li>'+
-                 '<button class="btn btn-primary" onclick="UserService.logout()">Logout</button>'
-             '</li>';
-             $("#tabs").html(nav);
-         main =
-             '<section id="highcharts"></section>'+
-             '<section id="forms"></section>'+
-             '<section id="view_more"></section>'+
-             '<section id="students" data-load="students.html"></section>';
-             $("#spapp").html(main);
-         break;
-       case Constants.ADMIN_ROLE:
-         nav = '<li class="nav-item mx-0 mx-lg-1">'+
-                 '<a class="nav-link py-3 px-0 px-lg-3 rounded " href="#students">Students</a>'+
-             '</li>'+
-             '<li class="nav-item mx-0 mx-lg-1">'+
-                 '<a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" href="#highcharts">Highcharts</a>'+
-             '</li>'+
-             '<li class="nav-item mx-0 mx-lg-1">'+
-                 '<a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" href="#forms">Forms</a>'+
-             '</li>'+
-             '<li class="nav-item mx-0 mx-lg-1">'+
-                 '<a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" href="#forms">FormsADMIN</a>'+
-             '</li>'+
-             '<li>'+
-                 '<button class="btn btn-primary" onclick="UserService.logout()">Logout</button>'
-             '</li>';
-             $("#tabs").html(nav);
-         main =
-             '<section id="highcharts"></section>'+
-             '<section id="forms"></section>'+
-             '<section id="view_more"></section>'+
-             '<section id="students" data-load="students.html"></section>';
-             $("#spapp").html(main);
-         break;
-       default:
-         $("#tabs").html(nav);
-         $("#spapp").html(main);
-     }
-   } else {
-       loadPage("login.html");
-   }
- }
+            // Base navigation items for all users
+            const baseNavItems = `
+                <li class="nav-item"><a class="nav-link" href="#" onclick="loadPage('profile.html')">Profile</a></li>
+                <li class="nav-item"><a class="nav-link" href="#" onclick="loadPage('goals.html')">Goals</a></li>
+                <li class="nav-item"><a class="nav-link" href="#" onclick="loadPage('workout-log.html')">Workout Log</a></li>
+            `;
+
+            // Role-specific navigation items
+            if (user && user.role) {
+                console.log('User role:', user.role);
+                switch(user.role) {
+                    case 'user':
+                        navItems = baseNavItems;
+                        break;
+                    case 'admin':
+                        navItems = baseNavItems + `
+                            <li class="nav-item"><a class="nav-link" href="#" onclick="loadPage('users.html')">Manage Users</a></li>
+                            <li class="nav-item"><a class="nav-link" href="#" onclick="loadPage('reports.html')">Reports</a></li>
+                        `;
+                        break;
+                    default:
+                        navItems = baseNavItems;
+                }
+            } else {
+                navItems = baseNavItems;
+            }
+
+            // Create the complete navbar HTML
+            const navbarHTML = `
+                <nav class="navbar navbar-expand-md mx-auto navbar-custom pt-4 pt-md-2 px-3 px-md-5">
+                    <div class="container-fluid">
+                        <a class="navbar-brand racing-sans-one-regular" href="#" onclick="loadPage('dashboard.html')">Trackify</a>
+                        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                            <span class="navbar-toggler-icon"></span>
+                        </button>
+                        <div class="collapse navbar-collapse" id="navbarNav">
+                            <ul class="navbar-nav me-auto">
+                                ${navItems}
+                            </ul>
+                            <ul class="navbar-nav">
+                                <li class="nav-item">
+                                    <button class="btn btn-outline-primary" onclick="UserService.logout()">Logout</button>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </nav>
+            `;
+
+            // Insert navbar at the top of the app
+            const app = document.getElementById('app');
+            if (app) {
+                console.log('Inserting navbar into app container');
+                app.insertAdjacentHTML('afterbegin', navbarHTML);
+                console.log('Navbar inserted successfully');
+            } else {
+                console.error('App container not found!');
+            }
+
+        } catch (error) {
+            console.error('Error generating navbar:', error);
+            // If any error occurs, redirect to login
+            loadPage("login.html");
+        }
+    }
 };

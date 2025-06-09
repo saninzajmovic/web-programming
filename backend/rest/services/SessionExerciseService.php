@@ -1,8 +1,8 @@
 <?php
     require_once 'BaseService.php';
-    require_once '../dao/SessionExerciseDao.php';
-    require_once '../dao/ExerciseDao.php';
-    require_once '../dao/NutritionDao.php';
+    require_once __DIR__ . '/../dao/SessionExerciseDao.php';
+    require_once __DIR__ . '/../dao/ExerciseDao.php';
+    require_once __DIR__ . '/../dao/NutritionDao.php';
 
     class SessionExerciseService extends BaseService {
         public function __construct() {
