@@ -19,7 +19,7 @@ var UserService = {
         if ($("#register-form").length > 0) {
             $("#register-form").validate({
                 rules: {
-                    username: {
+                    name: {
                         required: true,
                         minlength: 3
                     },
@@ -33,7 +33,7 @@ var UserService = {
                     }
                 },
                 messages: {
-                    username: {
+                    name: {
                         required: "Please enter a username",
                         minlength: "Username must be at least 3 characters"
                     },
@@ -159,11 +159,8 @@ var UserService = {
                     case 'user':
                         navItems = baseNavItems;
                         break;
-                    case 'admin':
-                        navItems = baseNavItems + `
-                            <li class="nav-item"><a class="nav-link" href="#" onclick="loadPage('users.html')">Manage Users</a></li>
-                            <li class="nav-item"><a class="nav-link" href="#" onclick="loadPage('reports.html')">Reports</a></li>
-                        `;
+                    case 'premium':
+                        navItems = baseNavItems;
                         break;
                     default:
                         navItems = baseNavItems;
@@ -171,6 +168,10 @@ var UserService = {
             } else {
                 navItems = baseNavItems;
             }
+
+            // Create premium indicator if user is premium
+            const premiumIndicator = (user && user.role === 'premium') ? 
+                `<span class="navbar-text premium-indicator">✨ Premium User</span>` : '';
 
             // Create the complete navbar HTML
             const navbarHTML = `
@@ -185,6 +186,7 @@ var UserService = {
                                 ${navItems}
                             </ul>
                             <ul class="navbar-nav">
+                                ${premiumIndicator}
                                 <li class="nav-item">
                                     <button class="btn btn-outline-primary" onclick="UserService.logout()">Logout</button>
                                 </li>

@@ -97,6 +97,29 @@ body {
     background-color: transparent !important;
 }
 
+.premium-indicator {
+    background: rgba(255, 215, 0, 0.2);
+    color: #ffd700 !important;
+    font-weight: bold;
+    padding: 4px 12px;
+    border-radius: 20px;
+    border: 1px solid #ffd700;
+    font-size: 0.9rem;
+    margin-right: 10px;
+    white-space: nowrap;
+}
+
+/* Optional: Add a subtle glow effect */
+.premium-indicator {
+    box-shadow: 0 0 10px rgba(255, 215, 0, 0.3);
+    animation: premiumGlow 3s ease-in-out infinite alternate;
+}
+
+@keyframes premiumGlow {
+    from { box-shadow: 0 0 5px rgba(255, 215, 0, 0.3); }
+    to { box-shadow: 0 0 15px rgba(255, 215, 0, 0.5); }
+}
+
 /* Style for input fields */
 .form-control {
     background-color: transparent !important; /* Transparent background */

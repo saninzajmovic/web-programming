@@ -274,5 +274,10 @@ function initApp() {
     }
 }
 
+// Call this when pages load
+$(document).ready(function() {
+    updateNavbarForUserRole();
+});
+
 // Start the app
 initApp();
